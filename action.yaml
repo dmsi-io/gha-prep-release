@@ -45,6 +45,7 @@ runs:
       uses: dmsi-io/gha-back-merge@main
       with:
         token: ${{ inputs.GITHUB_TOKEN }}
+        src-branch: ${{ github.ref_name }}
 
     - name: Checkout if skipped merge
       if: inputs.skip_back_merge == 'true'
