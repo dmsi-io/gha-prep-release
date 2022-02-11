@@ -2,6 +2,9 @@ name: 'Prepare Automated Release'
 description: 'Prepares a release by back merging main into develop and creating an automated release branch if marked for semver release.'
 
 inputs:
+  GITHUB_TOKEN:
+    description: 'GitHub Action Token or PAT'
+    required: true
   skip_back_merge:
     description: 'Flag to skip back merge step.'
     required: false
@@ -99,6 +102,6 @@ runs:
       if: steps.semver.outputs.tag != ''
       uses: peterjgrainger/action-create-branch@v2.0.1
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
       with:
         branch: 'auto-release/${{ steps.semver.outputs.tag }}'
