@@ -25,6 +25,7 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           skip_back_merge: true
+          skip_create_branch: true
 
       - name: Run gha-prep-release (semver_tag)
         id: provided-tag

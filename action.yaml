@@ -6,6 +6,11 @@ inputs:
     description: 'GitHub Action Token or PAT'
     required: true
 
+  skip_create_branch:
+    required: false
+    description: Flag to skip prep auto branch creation.
+    default: 'false'
+
   skip_back_merge:
     description: 'Flag to skip back merge step.'
     required: false
@@ -137,7 +142,7 @@ runs:
       shell: bash
 
     - name: Create Prep Release branch
-      if: steps.semver.outputs.tag != ''
+      if: inputs.skip_create_branch != 'true' && steps.semver.outputs.tag != ''
       uses: peterjgrainger/action-create-branch@v2.0.1
       env:
         GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
