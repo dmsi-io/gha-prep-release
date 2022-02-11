@@ -31,7 +31,6 @@ inputs:
   initial_version:
     description: The initial version.
     required: false
-    default: 'v0.1.0'
 
 outputs:
   tag:
