@@ -97,16 +97,16 @@ runs:
       run: |
         case "${{ github.event.head_commit.message }}" in
 
-          *"${{ inputs.patch_pattern }}"*)
-            echo "::set-output name=level::patch"
+          *"${{ inputs.major_pattern }}"*)
+            echo "::set-output name=level::major"
             ;;
 
           *"${{ inputs.minor_pattern }}"*)
             echo "::set-output name=level::minor"
             ;;
 
-          *"${{ inputs.major_pattern }}"*)
-            echo "::set-output name=level::major"
+          *"${{ inputs.patch_pattern }}"*)
+            echo "::set-output name=level::patch"
             ;;
         esac
       shell: bash
