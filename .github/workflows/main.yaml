@@ -13,14 +13,14 @@ jobs:
     steps:
       - name: Run gha-prep-release
         if: github.ref_name == 'main'
-        id: commit-tag
+        id: main-commit-tag
         uses: alehechka/gha-prep-release@main
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run gha-prep-release (semver_tag)
         if: github.ref_name != 'main'
-        id: provided-tag
+        id: commit-tag
         uses: alehechka/gha-prep-release@main
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -36,5 +36,6 @@ jobs:
 
       - name: Print Tags
         run: |
+          echo "Main Commit Tag: ${{ steps.main-commit-tag.outputs.tag }}"
           echo "Commit Tag: ${{ steps.commit-tag.outputs.tag }}"
           echo "Provided Tag: ${{ steps.provided-tag.outputs.tag }}"
