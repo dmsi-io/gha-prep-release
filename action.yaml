@@ -82,7 +82,6 @@ runs:
       uses: actions-ecosystem/action-get-latest-tag@v1
       with:
         semver_only: true
-        initial_version: ${{ inputs.initial_version }}
         with_initial_version: true
 
     - name: Increment Latest Tag
