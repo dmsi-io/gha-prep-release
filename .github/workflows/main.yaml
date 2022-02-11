@@ -12,10 +12,19 @@ jobs:
     name: Test gha-prep-release
     steps:
       - name: Run gha-prep-release
+        if: github.ref_name == 'main'
         id: commit-tag
         uses: alehechka/gha-prep-release@main
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run gha-prep-release (semver_tag)
+        if: github.ref_name != 'main'
+        id: provided-tag
+        uses: alehechka/gha-prep-release@main
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          skip_back_merge: true
 
       - name: Run gha-prep-release (semver_tag)
         id: provided-tag
