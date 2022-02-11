@@ -42,8 +42,10 @@ runs:
   using: composite
   steps:
     - name: Back Merge
-      if: inputs.skip_back_merge == 'true'
+      if: inputs.skip_back_merge != 'true'
       uses: dmsi-io/gha-back-merge@main
+      with:
+        token: ${{ inputs.GITHUB_TOKEN }}
 
     - name: Find Semver keyword
       if: inputs.semver_tag == ''
