@@ -47,6 +47,12 @@ runs:
       with:
         token: ${{ inputs.GITHUB_TOKEN }}
 
+    - name: Checkout if skipped merge
+      if: inputs.skip_back_merge == 'true'
+      uses: actions/checkout@v2
+      with:
+        token: ${{ inputs.GITHUB_TOKEN }}
+
     - name: Find Semver keyword
       if: inputs.semver_tag == ''
       id: semver-increment
