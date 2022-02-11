@@ -1,8 +1,23 @@
-name: 'Prepare Automated Release'
-description: 'Prepares a release by back merging main into develop and creating an automated release branch if marked for semver release.'
+name: Test gha-prep-release
 
-inputs:
-  back_merge_branch:
-    description: 'Branch to back merge into.'
-    required: false
-    default: ${{ github.event.repository.default_branch }}
+on:
+  push:
+    branches:
+      - main
+      - develop
+
+jobs:
+  test-gha-prep-release:
+    runs-on: ubuntu-latest
+    name: Test gha-prep-release
+    steps:
+      - name: Run gha-prep-release
+        uses: alehechka/gha-prep-release@develop
+        with:
+          skip_back_merge: true
+
+      - name: Run gha-prep-release (semver_tag)
+        uses: alehechka/gha-prep-release@develop
+        with:
+          skip_back_merge: true
+          semver_tag: 'hardcode-semver'
