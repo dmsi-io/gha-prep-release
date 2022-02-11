@@ -11,14 +11,14 @@ jobs:
     runs-on: ubuntu-latest
     name: Test gha-prep-release
     steps:
-      - name: Run gha-prep-release
+      - name: Run gha-prep-release (main)
         if: github.ref_name == 'main'
         id: main-commit-tag
         uses: alehechka/gha-prep-release@main
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Run gha-prep-release (semver_tag)
+      - name: Run gha-prep-release (non-main)
         if: github.ref_name != 'main'
         id: commit-tag
         uses: alehechka/gha-prep-release@develop
