@@ -1,42 +1,28 @@
-name: Test gha-prep-release
+name: Release gha-prep-release
 
 on:
   push:
     branches:
       - main
-      - develop
 
 jobs:
   test-gha-prep-release:
     runs-on: ubuntu-latest
     name: Test gha-prep-release
     steps:
-      - name: Run gha-prep-release (main)
-        if: github.ref_name == 'main'
+      - name: Prep Release
         id: main-commit-tag
         uses: alehechka/gha-prep-release@main
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Run gha-prep-release (non-main)
-        if: github.ref_name != 'main'
-        id: commit-tag
-        uses: alehechka/gha-prep-release@develop
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          skip_back_merge: true
           skip_create_branch: true
-
-      - name: Run gha-prep-release (semver_tag)
-        id: provided-tag
-        uses: alehechka/gha-prep-release@main
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          skip_back_merge: true
-          semver_tag: 'hardcode-semver'
 
       - name: Print Tags
         run: |
-          echo "Main Commit Tag: ${{ steps.main-commit-tag.outputs.tag }}"
-          echo "Commit Tag: ${{ steps.commit-tag.outputs.tag }}"
-          echo "Provided Tag: ${{ steps.provided-tag.outputs.tag }}"
+          echo "Commit Tag: ${{ steps.main-commit-tag.outputs.tag }}"
+
+      - uses: actions-ecosystem/action-push-tag@v1
+        if: steps.main-commit-tag.outputs.tag != ''
+        with:
+          tag: ${{ steps.main-commit-tag.outputs.tag }}
+          message: '${{ steps.main-commit-tag.outputs.tag }}: Prepare Release Branch'

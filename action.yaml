@@ -68,6 +68,9 @@ outputs:
   tag:
     description: 'The tag value used to create prep release branch.'
     value: ${{ steps.semver.outputs.tag }}
+  level:
+    description: 'The semver increment level found from commit message.'
+    value: ${{ steps.semver-increment.outputs.level }}
 
 runs:
   using: composite
@@ -105,15 +108,11 @@ runs:
           *"${{ inputs.major_pattern }}"*)
             echo "::set-output name=level::major"
             ;;
-          
-          *)
-            echo "::set-output name=level::none"
-            ;;
         esac
       shell: bash
 
     - name: Find Latest Tag
-      if: inputs.semver_tag == '' && steps.semver-increment.outputs.level != 'none'
+      if: inputs.semver_tag == '' && steps.semver-increment.outputs.level != ''
       id: latest-tag
       uses: actions-ecosystem/action-get-latest-tag@v1
       with:
