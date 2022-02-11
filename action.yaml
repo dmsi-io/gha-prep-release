@@ -51,7 +51,7 @@ runs:
       if: inputs.semver_tag == ''
       id: semver-increment
       run: |
-        case ${{ github.event.head_commit.message }} in
+        case "${{ github.event.head_commit.message }}" in
 
           *"${{ inputs.patch_pattern }}"*)
             echo "::set-output name=level::patch"
