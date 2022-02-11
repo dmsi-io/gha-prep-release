@@ -1,0 +1,113 @@
+name: 'Prepare Automated Release'
+description: 'Prepares a release by back merging main into develop and creating an automated release branch if marked for semver release.'
+
+inputs:
+  GITHUB_TOKEN:
+    description: 'GitHub Action Token or PAT'
+    required: true
+  skip_back_merge:
+    description: 'Flag to skip back merge step.'
+    required: false
+    default: 'false'
+  back_merge_branch:
+    description: 'Branch to back merge into.'
+    required: false
+    default: ${{ github.event.repository.default_branch }}
+  semver_tag:
+    description: 'Semver Override Tag'
+    required: false
+  patch_pattern:
+    description: 'Patch keyword to search for in determining semver increment'
+    required: false
+    default: '[PATCH]'
+  minor_pattern:
+    description: 'Minor keyword to search for in determining semver increment'
+    required: false
+    default: '[MINOR]'
+  major_pattern:
+    description: 'Major keyword to search for in determining semver increment'
+    required: false
+    default: '[MAJOR]'
+  initial_version:
+    description: The initial version.
+    required: false
+
+outputs:
+  tag:
+    description: 'The tag value used to create prep release branch.'
+    value: ${{ steps.semver.outputs.tag }}
+
+runs:
+  using: composite
+  steps:
+    - name: Back Merge
+      if: inputs.skip_back_merge != 'true'
+      uses: dmsi-io/gha-back-merge@main
+      with:
+        token: ${{ inputs.GITHUB_TOKEN }}
+
+    - name: Checkout if skipped merge
+      if: inputs.skip_back_merge == 'true'
+      uses: actions/checkout@v2
+      with:
+        token: ${{ inputs.GITHUB_TOKEN }}
+
+    - name: Find Semver keyword
+      if: inputs.semver_tag == ''
+      id: semver-increment
+      run: |
+        case "${{ github.event.head_commit.message }}" in
+
+          *"${{ inputs.patch_pattern }}"*)
+            echo "::set-output name=level::patch"
+            ;;
+
+          *"${{ inputs.minor_pattern }}"*)
+            echo "::set-output name=level::minor"
+            ;;
+
+          *"${{ inputs.major_pattern }}"*)
+            echo "::set-output name=level::major"
+            ;;
+          
+          *)
+            echo "::set-output name=level::none"
+            ;;
+        esac
+      shell: bash
+
+    - name: Find Latest Tag
+      if: inputs.semver_tag == '' && steps.semver-increment.outputs.level != 'none'
+      id: latest-tag
+      uses: actions-ecosystem/action-get-latest-tag@v1
+      with:
+        semver_only: true
+        with_initial_version: true
+
+    - name: Increment Latest Tag
+      uses: actions-ecosystem/action-bump-semver@v1
+      if: inputs.semver_tag == '' && steps.semver-increment.outputs.level != 'none'
+      id: bump-semver
+      with:
+        current_version: ${{ steps.latest-tag.outputs.tag }}
+        level: ${{ steps.semver-increment.outputs.level }}
+
+    - name: Select Semver Tag
+      id: semver
+      run: |
+        if [ -n "${{ inputs.semver_tag }}" ]; then
+          echo "::set-output name=tag::${{ inputs.semver_tag }}"
+
+        else
+          echo "::set-output name=tag::${{ steps.bump-semver.outputs.new_version }}"
+
+        fi
+      shell: bash
+
+    - name: Create Prep Release branch
+      if: steps.semver.outputs.tag != ''
+      uses: peterjgrainger/action-create-branch@v2.0.1
+      env:
+        GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
+      with:
+        branch: 'auto-release/${{ steps.semver.outputs.tag }}'
