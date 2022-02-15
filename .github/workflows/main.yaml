@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: Prep Release
         id: main-commit-tag
-        uses: alehechka/gha-prep-release@main
+        uses: dmsi-io/gha-prep-release@main
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           skip_create_branch: true
