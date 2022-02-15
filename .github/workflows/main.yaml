@@ -14,7 +14,7 @@ jobs:
         id: main-commit-tag
         uses: dmsi-io/gha-prep-release@main
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GHA_ACCESS_TOKEN }}
           skip_create_branch: true
           commit-author-name: ${{ secrets.GHA_ACCESS_USER }}
           commit-author-email: ${{ secrets.GHA_ACCESS_EMAIL }}
