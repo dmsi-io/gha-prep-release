@@ -16,6 +16,8 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           skip_create_branch: true
+          commit-author-name: ${{ secrets.GHA_ACCESS_USER }}
+          commit-author-email: ${{ secrets.GHA_ACCESS_EMAIL }}
 
       - name: Print Tags
         run: |
