@@ -18,7 +18,7 @@ This GitHub Action is a composite action that can handle back merging a released
 | `minor_pattern`       | Minor keyword to search for in determining semver increment.     | `string` | `false`  | `[MINOR]`                                                                                             |
 | `major_pattern`       | Major keyword to search for in determining semver increment.     | `string` | `false`  | `[MAJOR]`                                                                                             |
 | `initial_version`     | The initial version.                                             | `string` | `false`  | `v0.0.0`                                                                                              |
-| `release_prefix`      | Prefix for automation release branch.                            | `string` | `false`  | `auto-release`                                                                                        |
+| `release_prefix`      | Prefix for automation release branch.                            | `string` | `false`  | `release`                                                                                             |
 | `commit-message`      | The commit message to use for the back merge.                    | `string` | `false`  | `Merge branch '${{ inputs.back_merge_branch }}' into '${{ github.event.repository.default_branch }}'` |
 | `commit-author-name`  | The author name to use for the back merge.                       | `string` | `false`  | `github-actions`                                                                                      |
 | `commit-author-email` | The email to use for the back merge.                             | `string` | `false`  | `github-actions@github.com`                                                                           |
@@ -53,7 +53,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Test gha-prep-release
     steps:
-      - uses: alehechka/gha-prep-release@main
+      - uses: dmsi-io/gha-prep-release@main
         id: commit-tag
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -67,7 +67,7 @@ For a further practical example, see [.github/workflows/release.yml](.github/wor
 
 <!-- badge links -->
 
-[actions-workflow-main]: https://github.com/alehechka/gha-prep-release/actions/query?workflow%3ATest%20gha-prep-release
-[actions-workflow-main-badge]: https://img.shields.io/github/workflow/status/alehechka/gha-prep-release/Test%20gha-prep-release?label=Test%20gha-prep-release&style=for-the-badge&logo=github
-[release]: https://github.com/alehechka/gha-prep-release/releases
-[release-badge]: https://img.shields.io/github/v/release/alehechka/gha-prep-release?style=for-the-badge&logo=github
+[actions-workflow-main]: https://github.com/dmsi-io/gha-prep-release/actions/query?workflow%3ATest%20gha-prep-release
+[actions-workflow-main-badge]: https://img.shields.io/github/workflow/status/dmsi-io/gha-prep-release/Test%20gha-prep-release?label=Test%20gha-prep-release&style=for-the-badge&logo=github
+[release]: https://github.com/dmsi-io/gha-prep-release/releases
+[release-badge]: https://img.shields.io/github/v/release/dmsi-io/gha-prep-release?style=for-the-badge&logo=github

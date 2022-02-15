@@ -48,7 +48,7 @@ inputs:
   release_prefix:
     description: 'Prefix for automation release branch'
     required: false
-    default: 'auto-release'
+    default: 'release'
 
   commit-message:
     description: 'The commit message to use for the merge'
@@ -114,14 +114,16 @@ runs:
     - name: Find Latest Tag
       if: inputs.semver_tag == '' && steps.semver-increment.outputs.level != ''
       id: latest-tag
-      uses: actions-ecosystem/action-get-latest-tag@v1
+      # Commit equivalent to https://github.com/actions-ecosystem/action-get-latest-tag/releases/tag/v1
+      uses: actions-ecosystem/action-get-latest-tag@12e889eb7760061c988f66a45bbd2d5010772630
       with:
         semver_only: true
         with_initial_version: true
         initial_version: ${{ inputs.initial_version }}
 
     - name: Increment Latest Tag
-      uses: actions-ecosystem/action-bump-semver@v1
+      # Commit equivalent to https://github.com/actions-ecosystem/action-bump-semver/releases/tag/v1
+      uses: actions-ecosystem/action-bump-semver@34e334551143a5301f38c830e44a22273c6ff5c5
       if: inputs.semver_tag == '' && steps.latest-tag.outputs.tag != ''
       id: bump-semver
       with:
@@ -142,7 +144,8 @@ runs:
 
     - name: Create Prep Release branch
       if: inputs.skip_create_branch != 'true' && steps.semver.outputs.tag != ''
-      uses: peterjgrainger/action-create-branch@v2.0.1
+      # Commit equivalent to https://github.com/peterjgrainger/action-create-branch/releases/tag/v2.1.0
+      uses: peterjgrainger/action-create-branch@40d33f921267ca130cbacc770f41fc7c501a420f
       env:
         GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
       with:
