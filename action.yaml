@@ -65,6 +65,9 @@ inputs:
     default: 'github-actions@github.com'
 
 outputs:
+  branch:
+    description: 'Name of branch created.'
+    value: ${{ steps.branch.outputs.name }}
   tag:
     description: 'The tag value used to create prep release branch.'
     value: ${{ steps.semver.outputs.tag }}
@@ -142,6 +145,14 @@ runs:
         fi
       shell: bash
 
+    - name: Create Branch name
+      id: branch
+      run: |
+        BRANCH="${{ inputs.release_prefix }}/${{ steps.semver.outputs.tag }}"
+
+        echo "::set-output name=name::$BRANCH"
+      shell: bash
+
     - name: Create Prep Release branch
       if: inputs.skip_create_branch != 'true' && steps.semver.outputs.tag != ''
       # Commit equivalent to https://github.com/peterjgrainger/action-create-branch/releases/tag/v2.1.0
@@ -149,4 +160,4 @@ runs:
       env:
         GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
       with:
-        branch: '${{ inputs.release_prefix }}/${{ steps.semver.outputs.tag }}'
+        branch: ${{ steps.branch.outputs.name }}

@@ -33,10 +33,11 @@ It is then recommended to perform actual release automation on the created `auto
 
 ## Outputs
 
-| NAME    | DESCRIPTION                                                                                                                                         | TYPE     |
-| ------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| `tag`   | The tag value used to create prep release branch. If `semver-tag` is not provided and no semver increment pattern is found, this value will be `''` | `string` |
-| `level` | The semver increment level found from commit message {major, minor, patch}                                                                          | `string` |
+| NAME     | DESCRIPTION                                                                                                                                         | TYPE     |
+| -------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| `branch` | Name of branch created.                                                                                                                             | `string` |
+| `tag`    | The tag value used to create prep release branch. If `semver-tag` is not provided and no semver increment pattern is found, this value will be `''` | `string` |
+| `level`  | The semver increment level found from commit message {major, minor, patch}                                                                          | `string` |
 
 ## Example
 
