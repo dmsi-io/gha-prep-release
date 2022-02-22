@@ -170,7 +170,7 @@ runs:
     - name: Create Prep Release branch
       if: inputs.skip_create_branch != 'true' && steps.semver.outputs.tag != ''
       id: created_branch
-      uses: dmsi-io/gha-create-branch@feature/HOU-166
+      uses: dmsi-io/gha-create-branch@v3.0.0
       with:
         GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
         branch: ${{ steps.branch.outputs.name }}
