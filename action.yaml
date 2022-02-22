@@ -68,6 +68,9 @@ outputs:
   branch:
     description: 'Name of branch created.'
     value: ${{ steps.branch.outputs.name }}
+  created:
+    description: 'Boolean value representing whether or not a new branch was created.'
+    value: ${{ steps.created_branch.outputs.created }}
   tag:
     description: 'The tag value used to create prep release branch.'
     value: ${{ steps.semver.outputs.tag }}
@@ -155,9 +158,8 @@ runs:
 
     - name: Create Prep Release branch
       if: inputs.skip_create_branch != 'true' && steps.semver.outputs.tag != ''
-      # Commit equivalent to https://github.com/peterjgrainger/action-create-branch/releases/tag/v2.1.0
-      uses: peterjgrainger/action-create-branch@40d33f921267ca130cbacc770f41fc7c501a420f
-      env:
-        GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
+      id: created_branch
+      uses: dmsi-io/gha-create-branch@feature/HOU-166
       with:
+        GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
         branch: ${{ steps.branch.outputs.name }}
