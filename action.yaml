@@ -40,6 +40,11 @@ inputs:
     required: false
     default: '[MAJOR]'
 
+  skip_auto_increment:
+    description: 'Flag to skip the auto patch semver increment. Setting this to true will force the patch_pattern to match the commit message to increment at that level.'
+    required: false
+    default: 'false'
+
   initial_version:
     description: The initial version.
     required: false
@@ -50,16 +55,16 @@ inputs:
     required: false
     default: 'release'
 
-  commit-message:
+  back_commit_message:
     description: 'The commit message to use for the merge'
     required: false
 
-  commit-author-name:
+  author_name:
     description: 'The author name to use for the merge'
     required: false
     default: 'github-actions'
 
-  commit-author-email:
+  author_email:
     description: 'The email to use for the merge'
     required: false
     default: 'github-actions@github.com'
@@ -87,9 +92,9 @@ runs:
       with:
         token: ${{ inputs.GITHUB_TOKEN }}
         src-branch: ${{ github.ref_name }}
-        commit-message: ${{ inputs.commit-message }}
-        commit-author-name: ${{ inputs.commit-author-name }}
-        commit-author-email: ${{ inputs.commit-author-email }}
+        commit-message: ${{ inputs.back_commit_message }}
+        commit-author-name: ${{ inputs.author_name }}
+        commit-author-email: ${{ inputs.author_email }}
 
     - name: Checkout if skipped merge
       if: inputs.skip_back_merge == 'true'
@@ -113,6 +118,12 @@ runs:
 
           *"${{ inputs.patch_pattern }}"*)
             echo "::set-output name=level::patch"
+            ;;
+
+          *)
+            if [[ "${{ inputs.skip_auto_increment }}" != "true" ]]; then 
+              echo "::set-output name=level::patch"
+            fi
             ;;
         esac
       shell: bash
