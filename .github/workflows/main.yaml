@@ -14,10 +14,10 @@ jobs:
         id: main-commit-tag
         uses: dmsi-io/gha-prep-release@main
         with:
-          GITHUB_TOKEN: ${{ secrets.GHA_ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PUBLIC_GHA_ACCESS_TOKEN }}
           skip_create_branch: true
-          author_name: ${{ secrets.GHA_ACCESS_USER }}
-          author_email: ${{ secrets.GHA_ACCESS_EMAIL }}
+          author_name: ${{ secrets.PUBLIC_GHA_ACCESS_USER }}
+          author_email: ${{ secrets.PUBLIC_GHA_ACCESS_EMAIL }}
 
       - name: Print Tags
         run: |
