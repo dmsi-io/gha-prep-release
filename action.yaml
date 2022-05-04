@@ -128,6 +128,12 @@ runs:
         esac
       shell: bash
 
+    - name: Update file permissions
+      # This is now required due to a security update that makes it so the Docker environment used by the following actions will not have access to the checked out repo
+      # https://github.com/actions/checkout/issues/760
+      run: git config --global --add safe.directory /github/workspace
+      shell: bash
+
     - name: Find Latest Tag
       if: inputs.semver_tag == '' && steps.semver-increment.outputs.level != ''
       id: latest-tag
