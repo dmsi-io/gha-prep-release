@@ -4,16 +4,19 @@ on:
   push:
     branches:
       - develop
+  pull_request:
 
 jobs:
   test-gha-prep-release:
     runs-on: ubuntu-latest
     name: Test gha-prep-release
     steps:
+      - uses: actions/checkout@v3
+
       - name: Run gha-prep-release (non-main)
         if: github.ref_name != 'main'
         id: commit-tag
-        uses: dmsi-io/gha-prep-release@develop
+        uses: ./
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           skip_back_merge: true
@@ -21,7 +24,7 @@ jobs:
 
       - name: Run gha-prep-release (semver_tag)
         id: provided-tag
-        uses: dmsi-io/gha-prep-release@develop
+        uses: ./
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           skip_back_merge: true
