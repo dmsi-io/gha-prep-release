@@ -128,17 +128,10 @@ runs:
         esac
       shell: bash
 
-    - name: Update file permissions
-      # This is now required due to a security update that makes it so the Docker environment used by the following actions will not have access to the checked out repo
-      # https://github.com/actions/checkout/issues/760
-      run: git config --global --add safe.directory /github/workspace
-      shell: bash
-
     - name: Find Latest Tag
       if: inputs.semver_tag == '' && steps.semver-increment.outputs.level != ''
       id: latest-tag
-      # Commit equivalent to https://github.com/actions-ecosystem/action-get-latest-tag/releases/tag/v1
-      uses: actions-ecosystem/action-get-latest-tag@12e889eb7760061c988f66a45bbd2d5010772630
+      uses: dmsi-io/gha-get-latest-tag@main
       with:
         semver_only: true
         with_initial_version: true
