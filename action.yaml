@@ -109,20 +109,20 @@ runs:
         case "${{ github.event.head_commit.message }}" in
 
           *"${{ inputs.major_pattern }}"*)
-            echo "::set-output name=level::major"
+            echo "level=major" >> $GITHUB_OUTPUT
             ;;
 
           *"${{ inputs.minor_pattern }}"*)
-            echo "::set-output name=level::minor"
+            echo "level::minor" >> $GITHUB_OUTPUT
             ;;
 
           *"${{ inputs.patch_pattern }}"*)
-            echo "::set-output name=level::patch"
+            echo "level::patch" >> $GITHUB_OUTPUT
             ;;
 
           *)
             if [[ "${{ inputs.skip_auto_increment }}" != "true" ]]; then 
-              echo "::set-output name=level::patch"
+              echo "level::patch" >> $GITHUB_OUTPUT
             fi
             ;;
         esac
@@ -150,10 +150,10 @@ runs:
       id: semver
       run: |
         if [ -n "${{ inputs.semver_tag }}" ]; then
-          echo "::set-output name=tag::${{ inputs.semver_tag }}"
+          echo "tag=${{ inputs.semver_tag }}" >> $GITHUB_OUTPUT
 
         else
-          echo "::set-output name=tag::${{ steps.bump-semver.outputs.new_version }}"
+          echo "tag=${{ steps.bump-semver.outputs.new_version }}" >> $GITHUB_OUTPUT
 
         fi
       shell: bash
@@ -163,7 +163,7 @@ runs:
       run: |
         BRANCH="${{ inputs.release_prefix }}/${{ steps.semver.outputs.tag }}"
 
-        echo "::set-output name=name::$BRANCH"
+        echo "name=$BRANCH" >> $GITHUB_OUTPUT
       shell: bash
 
     - name: Create Prep Release branch
