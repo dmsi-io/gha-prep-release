@@ -113,16 +113,16 @@ runs:
             ;;
 
           *"${{ inputs.minor_pattern }}"*)
-            echo "level::minor" >> $GITHUB_OUTPUT
+            echo "level=minor" >> $GITHUB_OUTPUT
             ;;
 
           *"${{ inputs.patch_pattern }}"*)
-            echo "level::patch" >> $GITHUB_OUTPUT
+            echo "level=patch" >> $GITHUB_OUTPUT
             ;;
 
           *)
             if [[ "${{ inputs.skip_auto_increment }}" != "true" ]]; then 
-              echo "level::patch" >> $GITHUB_OUTPUT
+              echo "level=patch" >> $GITHUB_OUTPUT
             fi
             ;;
         esac
