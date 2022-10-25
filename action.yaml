@@ -98,7 +98,7 @@ runs:
 
     - name: Checkout if skipped merge
       if: inputs.skip_back_merge == 'true'
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         token: ${{ inputs.GITHUB_TOKEN }}
 
@@ -169,7 +169,7 @@ runs:
     - name: Create Prep Release branch
       if: inputs.skip_create_branch != 'true' && steps.semver.outputs.tag != ''
       id: created_branch
-      uses: dmsi-io/gha-create-branch@v3.0.0
+      uses: dmsi-io/gha-create-branch@v3
       with:
         GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
         branch: ${{ steps.branch.outputs.name }}
